@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 
 import mayorista.inventario.Service.InventarioService;
 import mayorista.inventario.Model.InventarioModel;
+// AQUÍ AGREGAMOS LA IMPORTACIÓN DEL DTO
+import mayorista.inventario.dto.InventarioDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -69,9 +71,10 @@ public class InventarioController {
             @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
     })
     @PostMapping
-    public ResponseEntity<?> crearProducto(@Valid @RequestBody InventarioModel producto) {
+    // CAMBIO AQUÍ: Recibe InventarioDTO en lugar de InventarioModel
+    public ResponseEntity<?> crearProducto(@Valid @RequestBody InventarioDTO producto) {
         // @Valid activa las validaciones del Model (@NotBlank, @NotNull, etc.)
-        // @RequestBody convierte el JSON que llega en un objeto InventarioModel
+        // @RequestBody convierte el JSON que llega en un objeto InventarioDTO
         InventarioModel creado = inventarioService.crearProducto(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado); // retorna 201
     }
@@ -81,7 +84,8 @@ public class InventarioController {
     @ApiResponse(responseCode = "200", description = "Producto actualizado exitosamente")
     @ApiResponse(responseCode = "404", description = "Producto no encontrado")
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody InventarioModel producto) {
+    // CAMBIO AQUÍ: Recibe InventarioDTO en lugar de InventarioModel
+    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody InventarioDTO producto) {
         try {
             return ResponseEntity.ok(inventarioService.actualizarProducto(id, producto)); // retorna 200 con el producto actualizado
         } catch (IllegalArgumentException e) {

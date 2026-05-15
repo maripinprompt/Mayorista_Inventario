@@ -2,6 +2,9 @@ package mayorista.inventario.Service;
 
 import mayorista.inventario.Model.InventarioModel;
 import mayorista.inventario.Repository.InventarioRepository;
+//IMPORTACIÓN DEL DTO AQUÍ
+import mayorista.inventario.dto.InventarioDTO;
+
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -31,18 +34,31 @@ public class InventarioService {
         return inventarioRepository.findByIdProveedor(idProveedor);
     }
 
-    public InventarioModel crearProducto(InventarioModel producto) {
+    //Ahora recibe InventarioDTO
+    public InventarioModel crearProducto(InventarioDTO datosDTO) {
+        // Creamos la entidad vacía y le pasamos los datos del DTO
+        InventarioModel producto = new InventarioModel();
+        producto.setNombreProducto(datosDTO.getNombreProducto());
+        producto.setCantidadStock(datosDTO.getCantidadStock());
+        producto.setPrecio(datosDTO.getPrecio());
+        producto.setCategoria(datosDTO.getCategoria());
+        producto.setIdProveedor(datosDTO.getIdProveedor());
+        
         return inventarioRepository.save(producto);
     }
 
-    public InventarioModel actualizarProducto(Long id, InventarioModel datos) {
+    //Ahora recibe InventarioDTO
+    public InventarioModel actualizarProducto(Long id, InventarioDTO datosDTO) {
         InventarioModel producto = inventarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
-        producto.setNombreProducto(datos.getNombreProducto());
-        producto.setCantidadStock(datos.getCantidadStock());
-        producto.setPrecio(datos.getPrecio());
-        producto.setCategoria(datos.getCategoria());
-        producto.setIdProveedor(datos.getIdProveedor());
+                
+        //Actualizamos la entidad con los datos nuevos del DTO
+        producto.setNombreProducto(datosDTO.getNombreProducto());
+        producto.setCantidadStock(datosDTO.getCantidadStock());
+        producto.setPrecio(datosDTO.getPrecio());
+        producto.setCategoria(datosDTO.getCategoria());
+        producto.setIdProveedor(datosDTO.getIdProveedor());
+        
         return inventarioRepository.save(producto);
     }
 
