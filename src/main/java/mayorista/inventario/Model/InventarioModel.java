@@ -3,7 +3,7 @@ package mayorista.inventario.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "inventario")
@@ -14,19 +14,20 @@ public class InventarioModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore // el id lo genera MySQL automaticamente, no se acepta ni se muestra en el JSON
+    // permite que el id se muestre en las respuestas GET, pero bloquea que se envie manualmente en POST/PUT
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotBlank // valida que el nombre del producto no venga vacio
+    @NotBlank
     private String nombreProducto;
 
-    @NotNull // valida que la cantidad no venga nula
+    @NotNull
     private Integer cantidadStock;
 
-    @NotNull // valida que el precio no venga nulo
+    @NotNull
     private Double precio;
 
     private String categoria;
 
-    private Long idProveedor; // referencia al id del proveedor
+    private Long idProveedor;
 }
